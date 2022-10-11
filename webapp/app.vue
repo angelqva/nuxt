@@ -5,6 +5,18 @@
 	body {
 		background-color: rgba(216, 216, 216, 0.452);
 	}
+	.form-control.is-invalid:hover:focus {
+		border-color: #ea4e3d !important;
+	}
+	.form-control.is-invalid:hover {
+		border-color: #ea4e3d !important;
+	}
+	.form-control.is-valid:hover:focus {
+		border-color: #66d432 !important;
+	}
+	.form-control.is-valid:hover {
+		border-color: #66d432 !important;
+	}
 </style>
 <script setup>
 	useHead({

@@ -87,7 +87,7 @@
 			if (element.getAttribute("aria-expanded") === "true") {
 				setTimeout(() => {
 					element.click();
-				}, 200);
+				}, 50);
 			}
 		}
 	};

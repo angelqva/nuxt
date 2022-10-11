@@ -54,8 +54,8 @@
 			required: false,
 		},
 		required: {
-			type: null,
-			default: null,
+			type: Boolean,
+			default: false,
 			required: false,
 		},
 		errorBackend: {
@@ -73,10 +73,15 @@
 			default: NaN,
 			required: false,
 		},
+		valido: {
+			type: Boolean,
+			default: true,
+			required: false,
+		},
 	});
-	const evento = ref();
+	const valor = ref("");
 	watch(
-		() => evento.value,
+		() => valor.value,
 		(newEl, oldEl) => {
 			if (newEl !== oldEl) {
 				if (valor.value.length >= 1 && valor.value[0] === "+") {
@@ -111,20 +116,32 @@
 			}
 		},
 	);
+
 	onMounted(() => {
-		console.log("mounted edad");
-		if (!isNaN(props.modelValue)) {
-			valor.value = props.modelValue + "";
+		const modelValue = props.modelValue;
+		if (!isNaN(modelValue)) {
+			valor.value = modelValue + "";
+			validacion(modelValue + "");
 		}
 	});
-	const valor = ref("");
 	const validado = ref(false);
 	const valido = ref(false);
+	watch(
+		() => valido.value,
+		(n, o) => {
+			if (n != o) {
+				emit("update:valido", n);
+			}
+		},
+	);
 	const feedback = ref("");
-	const emit = defineEmits(["update:modelValue", "update:errorBackend"]);
+	const emit = defineEmits([
+		"update:modelValue",
+		"update:errorBackend",
+		"update:valido",
+	]);
 	const validacion = (value: any): boolean => {
 		const num = Number(value);
-		console.log(num);
 		if (!!value && value === "") {
 			emit("update:modelValue", NaN);
 			valido.value = false;
@@ -140,29 +157,32 @@
 			if (props.type === "int" && !Number.isInteger(num)) {
 				valido.value = false;
 				feedback.value = "Debe ser un número entero";
+				emit("update:modelValue", num);
 				return true;
 			}
 			if (!isNaN(props.minValue) && num < props.minValue) {
 				valido.value = false;
 				feedback.value = `Debe ser un número mayor que ${props.minValue}`;
+				emit("update:modelValue", num);
 				return true;
 			}
 			if (!isNaN(props.maxValue) && num > props.maxValue) {
 				valido.value = false;
 				feedback.value = `Debe ser un número menor que ${props.maxValue}`;
+				emit("update:modelValue", num);
 				return true;
 			}
 		}
 		valido.value = true;
-		feedback.value = `Validación Correcta`;
+		feedback.value = ``;
+		emit("update:modelValue", num);
 		return true;
 	};
 	const updateValue = (event: any) => {
 		valor.value = event.target.value;
-		evento.value = event;
 	};
 	const checkRequired = () => {
-		if (props.required !== null && valor.value === "") {
+		if (props.required && valor.value === "") {
 			valido.value = false;
 			feedback.value = "Este campo es requerido";
 			validado.value = true;

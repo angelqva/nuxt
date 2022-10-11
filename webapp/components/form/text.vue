@@ -4,15 +4,14 @@
 		<input
 			type="text"
 			:class="[
+				'form-control',
 				{ 'is-valid': validado && valido },
 				{ 'is-invalid': validado && !valido },
-				'form-control',
 			]"
 			:placeholder="placeholder"
 			:value="modelValue"
 			@input="updateValue"
 			@focusout="checkRequired"
-			:required="required"
 			autocomplete="off"
 		/>
 		<div
@@ -48,8 +47,8 @@
 			required: false,
 		},
 		required: {
-			type: null,
-			default: null,
+			type: Boolean,
+			default: false,
 			required: false,
 		},
 		errorBackend: {
@@ -75,6 +74,11 @@
 		regExpFeedBack: {
 			type: String,
 			default: "",
+			required: false,
+		},
+		valido: {
+			type: Boolean,
+			default: true,
 			required: false,
 		},
 	});
@@ -110,8 +114,20 @@
 
 	const validado = ref(false);
 	const valido = ref(false);
+	watch(
+		() => valido.value,
+		(n, o) => {
+			if (n != o) {
+				emit("update:valido", n);
+			}
+		},
+	);
 	const feedback = ref("");
-	const emit = defineEmits(["update:modelValue", "update:errorBackend"]);
+	const emit = defineEmits([
+		"update:modelValue",
+		"update:errorBackend",
+		"update:valido",
+	]);
 	const updateValue = (event) => {
 		emit("update:modelValue", event.target.value);
 	};
@@ -119,7 +135,7 @@
 		if (watcher.error.length > 0) emit("update:errorBackend", "");
 	};
 	const checkRequired = () => {
-		if (props.required !== null && props.modelValue.length == 0) {
+		if (props.required && props.modelValue.length == 0) {
 			valido.value = false;
 			feedback.value = "Este campo es requerido";
 			validado.value = true;
@@ -131,7 +147,6 @@
 		}
 		if (watcher.min > 0) {
 			if (watcher.model.length < watcher.min) {
-				console.log(watcher.model);
 				feedback.value = `Debe tener más de ${watcher.min} caracteres`;
 				valido.value = false;
 				return true;
@@ -154,7 +169,7 @@
 		}
 		if (watcher.model.length > 0) {
 			valido.value = true;
-			feedback.value = "Validación Correcta";
+			feedback.value = "";
 			return true;
 		}
 		return false;
