@@ -293,7 +293,7 @@
 		width: 100%;
 		margin-top: 0.25rem;
 		font-size: 0.875em;
-		text-align: right;
+		text-align: left;
 	}
 	.feedbackSelect.invalidSelect {
 		color: #fd5c70;

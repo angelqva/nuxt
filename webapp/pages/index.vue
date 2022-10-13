@@ -79,7 +79,7 @@
 								:data="opcionesData"
 								:required="data.opciones.required"
 							/>
-							<FormFtextarea
+							<FormAreaText
 								v-model="data.textarea.value"
 								v-model:valido="data.textarea.valido"
 								v-model:errorBackend="
@@ -91,61 +91,18 @@
 								:maxLength="data.textarea.maxLength"
 								:required="data.textarea.required"
 							/>
-							<div class="form-check">
-								<input
-									class="form-check-input"
-									type="checkbox"
-									value=""
-									id="invalidCheck"
-									required
-								/>
-								<label
-									class="form-check-label"
-									for="invalidCheck"
-								>
-									Agree to terms and conditions
-								</label>
-								<div class="invalid-feedback">
-									You must agree before submitting.
-								</div>
-							</div>
+							<FormCheck
+								:label="data.check.label"
+								v-model="data.check.value"
+								v-model:error-backend="data.check.errorBackend"
+								v-model:valido="data.check.valido"
+							/>
 							<button
 								@click="clog"
 								class="btn btn-dark w-100 mt-3 mb-3"
 							>
 								Console Log
 							</button>
-							<div class="form-check">
-								<input
-									type="radio"
-									class="form-check-input"
-									id="validationFormCheck2"
-									name="radio-stacked"
-									required
-								/>
-								<label
-									class="form-check-label"
-									for="validationFormCheck2"
-									>Toggle this radio</label
-								>
-							</div>
-							<div class="form-check mb-3">
-								<input
-									type="radio"
-									class="form-check-input"
-									id="validationFormCheck3"
-									name="radio-stacked"
-									required
-								/>
-								<label
-									class="form-check-label"
-									for="validationFormCheck3"
-									>Or toggle this other radio</label
-								>
-								<div class="invalid-feedback">
-									More example invalid feedback text
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -218,6 +175,12 @@
 			maxLength: 500,
 			required: true,
 			valido: false,
+			errorBackend: "",
+		},
+		check: {
+			label: "Marque si Acepta",
+			value: false,
+			valido: true,
 			errorBackend: "",
 		},
 	});

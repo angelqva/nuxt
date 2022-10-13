@@ -4,10 +4,11 @@
 			<div class="text-start w-50 d-inline-block">
 				<label class="form-label">{{ label }}</label>
 			</div>
-			<div class="text-end w-50 d-inline-block">
-				<a @click="mostrar" class="form-label cursor-pointer">{{
-					show
-				}}</a>
+			<div class="text-end w-50 d-inline-block eye-show">
+				<a @click="mostrar" class="form-label cursor-pointer">
+					<i v-if="show" class="fa fa-eye-slash"></i>
+					<i v-else class="fa fa-eye"></i>
+				</a>
 			</div>
 		</div>
 		<input
@@ -31,7 +32,7 @@
 					'valid-feedback': validado && valido,
 					'invalid-feedback': validado && !valido,
 				},
-				'text-end',
+				'text-start',
 			]"
 		>
 			{{ feedback }}
@@ -96,20 +97,17 @@
 	const validado = ref(false);
 	const valido = ref(false);
 	const feedback = ref("");
-	const show = ref("Mostrar");
+	const show = ref(false);
 	const emit = defineEmits([
 		"update:modelValue",
 		"update:errorBackend",
 		"update:valido",
 	]);
 	const mostrar = () => {
-		if (show.value === "Mostrar") {
-			inputType.value = "text";
-			show.value = "Ocultar";
-		} else {
-			inputType.value = "password";
-			show.value = "Mostrar";
-		}
+		show.value = !show.value;
+		show.value
+			? (inputType.value = "text")
+			: (inputType.value = "password");
 	};
 	const validacion = (value: string): boolean => {
 		if (value.length == 0) {
@@ -184,3 +182,14 @@
 		},
 	);
 </script>
+<style>
+	.eye-show {
+		position: relative;
+		top: 2.5rem;
+		padding-right: 35px;
+	}
+	.eye-show i {
+		font-size: 1.25rem;
+		color: #5f7c95;
+	}
+</style>

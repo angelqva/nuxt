@@ -21,7 +21,7 @@
 					'valid-feedback': validado && valido,
 					'invalid-feedback': validado && !valido,
 				},
-				'text-end',
+				'text-start',
 			]"
 		>
 			{{ feedback }}
